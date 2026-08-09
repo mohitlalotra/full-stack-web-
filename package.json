@@ -1,9 +1,8 @@
 {
-  "name": "full-stack-web-wholesale-erp",
-  "version": "1.0.0",
+  "name": "wholesale-erp-workspace",
   "private": true,
   "scripts": {
-    "build": "cd client && npm install && npm run build",
-    "start": "cd server && npm start"
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix server start"
   }
 }
