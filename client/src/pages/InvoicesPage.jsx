@@ -197,11 +197,11 @@ const InvoicesPage = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <FileText className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+          <h1 className="text-xl font-bold text-zinc-900 flex items-center gap-2">
+            <FileText className="w-5 h-5 text-zinc-700" />
             Invoices & Payment Collection
           </h1>
-          <p className="text-xs text-zinc-500 font-mono">
+          <p className="text-xs text-zinc-600 font-mono font-medium">
             Generate invoices from Delivery Challans, record payments, and track receivables
           </p>
         </div>
@@ -209,7 +209,7 @@ const InvoicesPage = () => {
         {canEdit && (
           <button
             onClick={handleOpenModal}
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-zinc-900 hover:bg-black dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-semibold text-xs rounded-lg transition shadow-sm"
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-zinc-900 hover:bg-black text-white font-semibold text-xs rounded-lg transition shadow-sm"
           >
             <Plus className="w-4 h-4" />
             Generate New Invoice
@@ -218,16 +218,16 @@ const InvoicesPage = () => {
       </div>
 
       {/* Invoices List */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm">
         {loading ? (
-          <div className="p-8 text-center text-xs text-zinc-500 font-mono">Loading financial invoices...</div>
+          <div className="p-8 text-center text-xs text-zinc-600 font-mono">Loading financial invoices...</div>
         ) : invoices.length === 0 ? (
-          <div className="p-8 text-center text-xs text-zinc-500">No invoices recorded yet.</div>
+          <div className="p-8 text-center text-xs text-zinc-600">No invoices recorded yet.</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-500 font-mono uppercase text-[10px]">
+                <tr className="border-b border-zinc-200 bg-zinc-50 text-zinc-600 font-mono uppercase text-[10px]">
                   <th className="py-3 px-4">Invoice #</th>
                   <th className="py-3 px-4">Customer Account</th>
                   <th className="py-3 px-4">Invoice Date / Due</th>
@@ -238,36 +238,36 @@ const InvoicesPage = () => {
                   <th className="py-3 px-4 text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/80 font-mono">
+              <tbody className="divide-y divide-zinc-200 font-mono">
                 {invoices.map((inv) => {
                   const balanceDue = inv.totalAmount - inv.amountPaid;
                   return (
-                    <tr key={inv._id} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                      <td className="py-3 px-4 font-bold text-zinc-900 dark:text-zinc-100">{inv.invoiceNumber}</td>
-                      <td className="py-3 px-4 font-sans font-semibold text-zinc-900 dark:text-zinc-100">
+                    <tr key={inv._id} className="hover:bg-zinc-50">
+                      <td className="py-3 px-4 font-bold text-zinc-900">{inv.invoiceNumber}</td>
+                      <td className="py-3 px-4 font-sans font-semibold text-zinc-900">
                         {inv.customerId?.companyName || 'Unknown Customer'}
                       </td>
-                      <td className="py-3 px-4 text-[11px] text-zinc-500">
+                      <td className="py-3 px-4 text-[11px] text-zinc-600 font-medium">
                         <div>Inv: {new Date(inv.invoiceDate).toLocaleDateString()}</div>
-                        <div className="text-[10px] text-amber-600 dark:text-amber-400">Due: {new Date(inv.dueDate).toLocaleDateString()}</div>
+                        <div className="text-[10px] text-amber-700 font-bold">Due: {new Date(inv.dueDate).toLocaleDateString()}</div>
                       </td>
-                      <td className="py-3 px-4 text-right font-bold text-zinc-900 dark:text-zinc-100">
+                      <td className="py-3 px-4 text-right font-bold text-zinc-900">
                         ${inv.totalAmount?.toFixed(2)}
                       </td>
-                      <td className="py-3 px-4 text-right font-bold text-emerald-600 dark:text-emerald-400">
+                      <td className="py-3 px-4 text-right font-bold text-emerald-700">
                         ${inv.amountPaid?.toFixed(2)}
                       </td>
-                      <td className="py-3 px-4 text-right font-bold text-rose-600 dark:text-rose-400">
+                      <td className="py-3 px-4 text-right font-bold text-rose-700">
                         ${balanceDue > 0 ? balanceDue.toFixed(2) : '0.00'}
                       </td>
                       <td className="py-3 px-4 text-center">
                         <span
                           className={`text-[10px] font-bold px-2.5 py-0.5 rounded border ${
                             inv.paymentStatus === 'Paid'
-                              ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800'
+                              ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
                               : inv.paymentStatus === 'Partial'
-                              ? 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800'
-                              : 'bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 border-rose-300 dark:border-rose-800'
+                              ? 'bg-amber-100 text-amber-800 border-amber-300'
+                              : 'bg-rose-100 text-rose-800 border-rose-300'
                           }`}
                         >
                           {inv.paymentStatus}
@@ -282,7 +282,7 @@ const InvoicesPage = () => {
                                 setPayAmount((inv.totalAmount - inv.amountPaid).toFixed(2));
                                 setShowPayModal(true);
                               }}
-                              className="px-2 py-1 bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 font-sans font-semibold text-[11px] rounded flex items-center gap-1"
+                              className="px-2 py-1 bg-emerald-100 text-emerald-800 border border-emerald-300 font-sans font-semibold text-[11px] rounded flex items-center gap-1 hover:bg-emerald-200"
                             >
                               <CreditCard className="w-3 h-3" /> Record Payment
                             </button>
@@ -292,7 +292,7 @@ const InvoicesPage = () => {
                               setSelectedInvoice(inv);
                               setShowPrintModal(true);
                             }}
-                            className="p-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded border border-zinc-300 dark:border-zinc-700"
+                            className="p-1 bg-zinc-100 text-zinc-700 rounded border border-zinc-300 hover:bg-zinc-200"
                             title="Print Invoice Document"
                           >
                             <Printer className="w-3.5 h-3.5" />
@@ -311,10 +311,10 @@ const InvoicesPage = () => {
       {/* Generate Invoice Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Generate Billing Invoice</h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">
+          <div className="bg-white border border-zinc-200 rounded-xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-zinc-200">
+              <h3 className="text-sm font-bold text-zinc-900">Generate Billing Invoice</h3>
+              <button onClick={() => setShowCreateModal(false)} className="text-zinc-400 hover:text-zinc-600">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -322,12 +322,12 @@ const InvoicesPage = () => {
             <form onSubmit={handleCreateInvoice} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-semibold text-zinc-500 uppercase">Customer Account</label>
+                  <label className="block text-[11px] font-semibold text-zinc-700 uppercase">Customer Account</label>
                   <select
                     required
                     value={selectedCustomerId}
                     onChange={(e) => setSelectedCustomerId(e.target.value)}
-                    className="mt-1 w-full px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded text-xs text-zinc-900 dark:text-zinc-100"
+                    className="mt-1 w-full px-3 py-1.5 bg-zinc-50 border border-zinc-300 rounded text-xs text-zinc-900 font-medium"
                   >
                     {customers.map((cust) => (
                       <option key={cust._id} value={cust._id}>
@@ -338,11 +338,11 @@ const InvoicesPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-zinc-500 uppercase">Link Delivery Challan (Optional)</label>
+                  <label className="block text-[11px] font-semibold text-zinc-700 uppercase">Link Delivery Challan (Optional)</label>
                   <select
                     value={selectedChallanId}
                     onChange={(e) => handleSelectChallan(e.target.value)}
-                    className="mt-1 w-full px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded text-xs text-zinc-900 dark:text-zinc-100 font-mono"
+                    className="mt-1 w-full px-3 py-1.5 bg-zinc-50 border border-zinc-300 rounded text-xs text-zinc-900 font-mono"
                   >
                     <option value="">-- Standalone Invoice --</option>
                     {challans.map((ch) => (
@@ -355,36 +355,36 @@ const InvoicesPage = () => {
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-500 uppercase">Payment Due Date</label>
+                <label className="block text-[11px] font-semibold text-zinc-700 uppercase">Payment Due Date</label>
                 <input
                   type="date"
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
-                  className="mt-1 w-full px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded text-xs text-zinc-900 dark:text-zinc-100 font-mono"
+                  className="mt-1 w-full px-3 py-1.5 bg-zinc-50 border border-zinc-300 rounded text-xs text-zinc-900 font-mono"
                 />
               </div>
 
               {/* Items List */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="block text-[11px] font-semibold text-zinc-500 uppercase">Billed Items</label>
+                  <label className="block text-[11px] font-semibold text-zinc-700 uppercase">Billed Items</label>
                   <button
                     type="button"
                     onClick={handleAddItemRow}
-                    className="text-[11px] text-zinc-900 dark:text-zinc-100 hover:underline flex items-center gap-1 font-semibold"
+                    className="text-[11px] text-zinc-900 hover:underline flex items-center gap-1 font-semibold"
                   >
                     <Plus className="w-3 h-3" /> Add Item Line
                   </button>
                 </div>
 
                 {invoiceItems.map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-2 bg-zinc-50 dark:bg-zinc-950 p-2 border border-zinc-200 dark:border-zinc-800 rounded">
+                  <div key={idx} className="flex items-center gap-2 bg-zinc-50 p-2 border border-zinc-200 rounded">
                     <input
                       type="text"
                       placeholder="Item description"
                       value={item.name}
                       onChange={(e) => handleItemChange(idx, 'name', e.target.value)}
-                      className="flex-1 px-2 py-1 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded text-xs text-zinc-900 dark:text-zinc-100"
+                      className="flex-1 px-2 py-1 bg-white border border-zinc-300 rounded text-xs text-zinc-900 font-medium"
                     />
 
                     <input
@@ -393,7 +393,7 @@ const InvoicesPage = () => {
                       placeholder="Qty"
                       value={item.quantity}
                       onChange={(e) => handleItemChange(idx, 'quantity', Number(e.target.value))}
-                      className="w-16 px-2 py-1 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded text-xs font-mono text-zinc-900 dark:text-zinc-100"
+                      className="w-16 px-2 py-1 bg-white border border-zinc-300 rounded text-xs font-mono text-zinc-900"
                     />
 
                     <input
@@ -403,14 +403,14 @@ const InvoicesPage = () => {
                       placeholder="Price"
                       value={item.unitPrice}
                       onChange={(e) => handleItemChange(idx, 'unitPrice', Number(e.target.value))}
-                      className="w-24 px-2 py-1 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded text-xs font-mono text-zinc-900 dark:text-zinc-100"
+                      className="w-24 px-2 py-1 bg-white border border-zinc-300 rounded text-xs font-mono text-zinc-900"
                     />
 
                     {invoiceItems.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleRemoveItemRow(idx)}
-                        className="text-rose-600 dark:text-rose-400 p-1"
+                        className="text-rose-600 p-1 hover:text-rose-800"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -419,17 +419,17 @@ const InvoicesPage = () => {
                 ))}
               </div>
 
-              <div className="pt-3 flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800">
+              <div className="pt-3 flex justify-end gap-2 border-t border-zinc-200">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-medium rounded"
+                  className="px-3 py-1.5 bg-zinc-100 text-zinc-700 text-xs font-medium rounded"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-1.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-semibold rounded"
+                  className="px-4 py-1.5 bg-zinc-900 text-white text-xs font-semibold rounded"
                 >
                   Save & Issue Invoice
                 </button>
@@ -442,35 +442,35 @@ const InvoicesPage = () => {
       {/* Record Payment Modal */}
       {showPayModal && selectedInvoice && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
+          <div className="bg-white border border-zinc-200 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-zinc-200">
               <div>
-                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Record Payment Received</h3>
-                <p className="text-xs text-zinc-500 font-mono">Invoice #{selectedInvoice.invoiceNumber}</p>
+                <h3 className="text-sm font-bold text-zinc-900">Record Payment Received</h3>
+                <p className="text-xs text-zinc-600 font-mono font-medium">Invoice #{selectedInvoice.invoiceNumber}</p>
               </div>
-              <button onClick={() => setShowPayModal(false)} className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">
+              <button onClick={() => setShowPayModal(false)} className="text-zinc-400 hover:text-zinc-600">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleRecordPayment} className="space-y-3">
-              <div className="p-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded text-xs space-y-1 font-mono">
-                <div className="flex justify-between text-zinc-500">
+              <div className="p-3 bg-zinc-50 border border-zinc-200 rounded text-xs space-y-1 font-mono">
+                <div className="flex justify-between text-zinc-600 font-medium">
                   <span>Total Billed:</span>
                   <span>${selectedInvoice.totalAmount?.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-semibold">
+                <div className="flex justify-between text-emerald-700 font-bold">
                   <span>Already Paid:</span>
                   <span>${selectedInvoice.amountPaid?.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-rose-600 dark:text-rose-400 font-bold border-t border-zinc-200 dark:border-zinc-800 pt-1">
+                <div className="flex justify-between text-rose-700 font-bold border-t border-zinc-200 pt-1">
                   <span>Remaining Balance:</span>
                   <span>${(selectedInvoice.totalAmount - selectedInvoice.amountPaid).toFixed(2)}</span>
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-500 uppercase">Payment Amount ($)</label>
+                <label className="block text-[11px] font-semibold text-zinc-700 uppercase">Payment Amount ($)</label>
                 <input
                   type="number"
                   step="0.01"
@@ -479,16 +479,16 @@ const InvoicesPage = () => {
                   required
                   value={payAmount}
                   onChange={(e) => setPayAmount(e.target.value)}
-                  className="mt-1 w-full px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded text-xs font-mono text-zinc-900 dark:text-zinc-100"
+                  className="mt-1 w-full px-3 py-1.5 bg-zinc-50 border border-zinc-300 rounded text-xs font-mono text-zinc-900 font-bold"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-500 uppercase">Payment Method</label>
+                <label className="block text-[11px] font-semibold text-zinc-700 uppercase">Payment Method</label>
                 <select
                   value={payMethod}
                   onChange={(e) => setPayMethod(e.target.value)}
-                  className="mt-1 w-full px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded text-xs text-zinc-900 dark:text-zinc-100"
+                  className="mt-1 w-full px-3 py-1.5 bg-zinc-50 border border-zinc-300 rounded text-xs text-zinc-900 font-medium"
                 >
                   <option value="Bank Transfer">Bank Transfer (ACH / Wire)</option>
                   <option value="Cheque">Corporate Cheque</option>
@@ -499,21 +499,21 @@ const InvoicesPage = () => {
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-500 uppercase">Reference / Notes</label>
+                <label className="block text-[11px] font-semibold text-zinc-700 uppercase">Reference / Notes</label>
                 <input
                   type="text"
                   placeholder="e.g. Bank Ref #99281 or Cheque #4029"
                   value={payNotes}
                   onChange={(e) => setPayNotes(e.target.value)}
-                  className="mt-1 w-full px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded text-xs text-zinc-900 dark:text-zinc-100"
+                  className="mt-1 w-full px-3 py-1.5 bg-zinc-50 border border-zinc-300 rounded text-xs text-zinc-900"
                 />
               </div>
 
-              <div className="pt-3 flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800">
+              <div className="pt-3 flex justify-end gap-2 border-t border-zinc-200">
                 <button
                   type="button"
                   onClick={() => setShowPayModal(false)}
-                  className="px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-medium rounded"
+                  className="px-3 py-1.5 bg-zinc-100 text-zinc-700 text-xs font-medium rounded"
                 >
                   Cancel
                 </button>
@@ -532,17 +532,17 @@ const InvoicesPage = () => {
       {/* Printable Invoice Modal */}
       {showPrintModal && selectedInvoice && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Invoice Printable Document</h3>
+          <div className="bg-white border border-zinc-200 rounded-xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-zinc-200">
+              <h3 className="text-sm font-bold text-zinc-900">Invoice Printable Document</h3>
               <div className="flex items-center gap-2">
                 <button
                   onClick={handlePrint}
-                  className="px-3 py-1 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-semibold rounded flex items-center gap-1"
+                  className="px-3 py-1 bg-zinc-900 text-white text-xs font-semibold rounded flex items-center gap-1"
                 >
                   <Printer className="w-3.5 h-3.5" /> Print / Save PDF
                 </button>
-                <button onClick={() => setShowPrintModal(false)} className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">
+                <button onClick={() => setShowPrintModal(false)} className="text-zinc-400 hover:text-zinc-600">
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -557,23 +557,23 @@ const InvoicesPage = () => {
                 </div>
                 <div className="text-right font-mono">
                   <div className="text-lg font-bold text-zinc-900">{selectedInvoice.invoiceNumber}</div>
-                  <div className="text-xs text-zinc-500">Date: {new Date(selectedInvoice.invoiceDate).toLocaleDateString()}</div>
+                  <div className="text-xs text-zinc-600">Date: {new Date(selectedInvoice.invoiceDate).toLocaleDateString()}</div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-6 text-xs">
                 <div>
-                  <span className="font-bold text-zinc-500 uppercase font-mono text-[10px]">Billed To:</span>
+                  <span className="font-bold text-zinc-600 uppercase font-mono text-[10px]">Billed To:</span>
                   <div className="font-bold text-zinc-900 text-sm mt-1">{selectedInvoice.customerId?.companyName}</div>
-                  <div className="text-zinc-600">{selectedInvoice.customerId?.contactPerson}</div>
+                  <div className="text-zinc-700 font-medium">{selectedInvoice.customerId?.contactPerson}</div>
                   <div className="text-zinc-600">{selectedInvoice.customerId?.address}</div>
                 </div>
                 <div className="text-right font-mono">
-                  <span className="font-bold text-zinc-500 uppercase text-[10px]">Payment Terms:</span>
-                  <div className="font-semibold text-zinc-800 mt-1">
+                  <span className="font-bold text-zinc-600 uppercase text-[10px]">Payment Terms:</span>
+                  <div className="font-semibold text-zinc-900 mt-1">
                     Due Date: {new Date(selectedInvoice.dueDate).toLocaleDateString()}
                   </div>
-                  <div className="mt-2 inline-block px-2 py-0.5 rounded border text-[10px] font-bold uppercase bg-zinc-100 text-zinc-800">
+                  <div className="mt-2 inline-block px-2 py-0.5 rounded border text-[10px] font-bold uppercase bg-zinc-100 text-zinc-900">
                     Status: {selectedInvoice.paymentStatus}
                   </div>
                 </div>
@@ -592,9 +592,9 @@ const InvoicesPage = () => {
                 <tbody className="divide-y divide-zinc-200 font-mono">
                   {selectedInvoice.items?.map((item, i) => (
                     <tr key={i}>
-                      <td className="py-2.5 px-3 font-sans font-medium text-zinc-800">{item.name}</td>
-                      <td className="py-2.5 px-3 text-center text-zinc-700">{item.quantity}</td>
-                      <td className="py-2.5 px-3 text-right text-zinc-700">${item.unitPrice?.toFixed(2)}</td>
+                      <td className="py-2.5 px-3 font-sans font-semibold text-zinc-900">{item.name}</td>
+                      <td className="py-2.5 px-3 text-center text-zinc-800 font-medium">{item.quantity}</td>
+                      <td className="py-2.5 px-3 text-right text-zinc-800 font-medium">${item.unitPrice?.toFixed(2)}</td>
                       <td className="py-2.5 px-3 text-right font-bold text-zinc-900">${item.amount?.toFixed(2)}</td>
                     </tr>
                   ))}
@@ -603,7 +603,7 @@ const InvoicesPage = () => {
 
               {/* Totals */}
               <div className="flex justify-end pt-4 border-t border-zinc-200">
-                <div className="w-64 space-y-1.5 font-mono text-xs text-zinc-800">
+                <div className="w-64 space-y-1.5 font-mono text-xs text-zinc-900">
                   <div className="flex justify-between">
                     <span>Subtotal:</span>
                     <span>${selectedInvoice.totalAmount?.toFixed(2)}</span>

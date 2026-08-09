@@ -104,15 +104,6 @@ const ChallansPage = () => {
     }
   };
 
-  const handleUpdateStatus = async (id, nextStatus) => {
-    try {
-      await api.put(`/challans/${id}/status`, { status: nextStatus });
-      fetchData();
-    } catch (err) {
-      alert(err.response?.data?.message || 'Failed to update status');
-    }
-  };
-
   const handleOpenModal = () => {
     if (customers.length > 0 && !selectedCustomerId) {
       setSelectedCustomerId(customers[0]._id);
@@ -123,16 +114,25 @@ const ChallansPage = () => {
     setShowModal(true);
   };
 
+  const handleUpdateStatus = async (id, nextStatus) => {
+    try {
+      await api.put(`/challans/${id}/status`, { status: nextStatus });
+      fetchData();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to update status');
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Truck className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+          <h1 className="text-xl font-bold text-zinc-900 flex items-center gap-2">
+            <Truck className="w-5 h-5 text-zinc-700" />
             Sales Delivery Challans (Outbound Stock)
           </h1>
-          <p className="text-xs text-zinc-500 font-mono">
+          <p className="text-xs text-zinc-600 font-mono font-medium">
             Dispatching a Delivery Challan automatically decrements product current stock
           </p>
         </div>
@@ -140,7 +140,7 @@ const ChallansPage = () => {
         {canEdit && (
           <button
             onClick={handleOpenModal}
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-zinc-900 hover:bg-black dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-semibold text-xs rounded-lg transition shadow-sm"
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-zinc-900 hover:bg-black text-white font-semibold text-xs rounded-lg transition shadow-sm"
           >
             <Plus className="w-4 h-4" />
             New Delivery Challan
@@ -149,16 +149,16 @@ const ChallansPage = () => {
       </div>
 
       {/* Challans List */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm">
         {loading ? (
-          <div className="p-8 text-center text-xs text-zinc-500 font-mono">Loading outbound challans...</div>
+          <div className="p-8 text-center text-xs text-zinc-600 font-mono">Loading outbound challans...</div>
         ) : challans.length === 0 ? (
-          <div className="p-8 text-center text-xs text-zinc-500">No delivery challans recorded yet.</div>
+          <div className="p-8 text-center text-xs text-zinc-600">No delivery challans recorded yet.</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-500 font-mono uppercase text-[10px]">
+                <tr className="border-b border-zinc-200 bg-zinc-50 text-zinc-600 font-mono uppercase text-[10px]">
                   <th className="py-3 px-4">Challan #</th>
                   <th className="py-3 px-4">Customer Account</th>
                   <th className="py-3 px-4">Dispatch Date</th>
@@ -167,28 +167,28 @@ const ChallansPage = () => {
                   {canEdit && <th className="py-3 px-4 text-center">Actions</th>}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/80">
+              <tbody className="divide-y divide-zinc-200">
                 {challans.map((ch) => (
-                  <tr key={ch._id} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                    <td className="py-3 px-4 font-mono font-bold text-amber-600 dark:text-amber-400">{ch.challanNumber}</td>
-                    <td className="py-3 px-4 font-semibold text-zinc-900 dark:text-zinc-100">
+                  <tr key={ch._id} className="hover:bg-zinc-50">
+                    <td className="py-3 px-4 font-mono font-bold text-amber-700">{ch.challanNumber}</td>
+                    <td className="py-3 px-4 font-semibold text-zinc-900">
                       {ch.customerId?.companyName || 'Unknown Customer'}
                     </td>
-                    <td className="py-3 px-4 font-mono text-[11px] text-zinc-500">
+                    <td className="py-3 px-4 font-mono text-[11px] text-zinc-600 font-medium">
                       {new Date(ch.dispatchDate).toLocaleDateString()}
                     </td>
                     <td className="py-3 px-4 text-right font-mono">
-                      <div className="font-bold text-zinc-900 dark:text-zinc-100">${ch.totalAmount?.toFixed(2)}</div>
-                      <div className="text-[10px] text-zinc-500">{ch.items?.length || 0} items</div>
+                      <div className="font-bold text-zinc-900">${ch.totalAmount?.toFixed(2)}</div>
+                      <div className="text-[10px] text-zinc-600 font-medium">{ch.items?.length || 0} items</div>
                     </td>
                     <td className="py-3 px-4 text-center">
                       <span
                         className={`text-[10px] font-bold px-2.5 py-0.5 rounded border ${
                           ch.status === 'Dispatched'
-                            ? 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800'
+                            ? 'bg-amber-100 text-amber-800 border-amber-300'
                             : ch.status === 'Delivered'
-                            ? 'bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 border-blue-300 dark:border-blue-800'
-                            : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800'
+                            ? 'bg-blue-100 text-blue-800 border-blue-300'
+                            : 'bg-emerald-100 text-emerald-800 border-emerald-300'
                         }`}
                       >
                         {ch.status}
@@ -199,16 +199,16 @@ const ChallansPage = () => {
                         {ch.status === 'Dispatched' && (
                           <button
                             onClick={() => handleUpdateStatus(ch._id, 'Delivered')}
-                            className="px-2.5 py-1 bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-800 text-[11px] font-semibold rounded"
+                            className="px-2.5 py-1 bg-blue-100 text-blue-800 border border-blue-300 text-[11px] font-semibold rounded hover:bg-blue-200"
                           >
                             Mark Delivered
                           </button>
                         )}
                         {ch.status === 'Delivered' && (
-                          <span className="text-[10px] font-mono text-zinc-500">Ready for Invoicing</span>
+                          <span className="text-[10px] font-mono text-zinc-600 font-semibold">Ready for Invoicing</span>
                         )}
                         {ch.status === 'Invoiced' && (
-                          <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-1">
+                          <span className="text-[10px] font-mono text-emerald-700 font-bold flex items-center justify-center gap-1">
                             <CheckCircle className="w-3 h-3" /> Invoiced
                           </span>
                         )}
@@ -225,22 +225,22 @@ const ChallansPage = () => {
       {/* Create Challan Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Create & Dispatch Outbound Delivery Challan</h3>
-              <button onClick={() => setShowModal(false)} className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">
+          <div className="bg-white border border-zinc-200 rounded-xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-zinc-200">
+              <h3 className="text-sm font-bold text-zinc-900">Create & Dispatch Outbound Delivery Challan</h3>
+              <button onClick={() => setShowModal(false)} className="text-zinc-400 hover:text-zinc-600">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleCreateChallan} className="space-y-4">
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-500 uppercase">Customer Account</label>
+                <label className="block text-[11px] font-semibold text-zinc-700 uppercase">Customer Account</label>
                 <select
                   required
                   value={selectedCustomerId}
                   onChange={(e) => setSelectedCustomerId(e.target.value)}
-                  className="mt-1 w-full px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded text-xs text-zinc-900 dark:text-zinc-100"
+                  className="mt-1 w-full px-3 py-1.5 bg-zinc-50 border border-zinc-300 rounded text-xs text-zinc-900 font-medium"
                 >
                   {customers.map((cust) => (
                     <option key={cust._id} value={cust._id}>
@@ -253,11 +253,11 @@ const ChallansPage = () => {
               {/* Items List */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="block text-[11px] font-semibold text-zinc-500 uppercase">Dispatch Line Items</label>
+                  <label className="block text-[11px] font-semibold text-zinc-700 uppercase">Dispatch Line Items</label>
                   <button
                     type="button"
                     onClick={handleAddItemRow}
-                    className="text-[11px] text-zinc-900 dark:text-zinc-100 hover:underline flex items-center gap-1 font-semibold"
+                    className="text-[11px] text-zinc-900 hover:underline flex items-center gap-1 font-semibold"
                   >
                     <Plus className="w-3 h-3" /> Add Product Item
                   </button>
@@ -268,13 +268,13 @@ const ChallansPage = () => {
                   const isExceeded = currentProd && item.quantity > currentProd.currentStock;
 
                   return (
-                    <div key={idx} className="flex flex-col gap-1 bg-zinc-50 dark:bg-zinc-950 p-2 border border-zinc-200 dark:border-zinc-800 rounded">
+                    <div key={idx} className="flex flex-col gap-1 bg-zinc-50 p-2 border border-zinc-200 rounded">
                       <div className="flex items-center gap-2">
                         <select
                           required
                           value={item.productId}
                           onChange={(e) => handleItemChange(idx, 'productId', e.target.value)}
-                          className="flex-1 px-2 py-1 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded text-xs text-zinc-900 dark:text-zinc-100"
+                          className="flex-1 px-2 py-1 bg-white border border-zinc-300 rounded text-xs text-zinc-900 font-medium"
                         >
                           <option value="">-- Select Product --</option>
                           {products.map((p) => (
@@ -290,7 +290,7 @@ const ChallansPage = () => {
                           placeholder="Qty"
                           value={item.quantity}
                           onChange={(e) => handleItemChange(idx, 'quantity', Number(e.target.value))}
-                          className="w-16 px-2 py-1 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded text-xs font-mono text-zinc-900 dark:text-zinc-100"
+                          className="w-16 px-2 py-1 bg-white border border-zinc-300 rounded text-xs font-mono text-zinc-900"
                         />
 
                         <input
@@ -300,14 +300,14 @@ const ChallansPage = () => {
                           placeholder="Price"
                           value={item.unitPrice}
                           onChange={(e) => handleItemChange(idx, 'unitPrice', Number(e.target.value))}
-                          className="w-24 px-2 py-1 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded text-xs font-mono text-zinc-900 dark:text-zinc-100"
+                          className="w-24 px-2 py-1 bg-white border border-zinc-300 rounded text-xs font-mono text-zinc-900"
                         />
 
                         {challanItems.length > 1 && (
                           <button
                             type="button"
                             onClick={() => handleRemoveItemRow(idx)}
-                            className="text-rose-600 dark:text-rose-400 p-1"
+                            className="text-rose-600 p-1 hover:text-rose-800"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -315,7 +315,7 @@ const ChallansPage = () => {
                       </div>
 
                       {isExceeded && (
-                        <div className="text-[10px] text-rose-600 dark:text-rose-400 font-mono flex items-center gap-1">
+                        <div className="text-[10px] text-rose-600 font-mono flex items-center gap-1 font-semibold">
                           <AlertCircle className="w-3 h-3" /> Warning: Requested quantity exceeds available stock ({currentProd.currentStock})
                         </div>
                       )}
@@ -324,17 +324,17 @@ const ChallansPage = () => {
                 })}
               </div>
 
-              <div className="pt-3 flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800">
+              <div className="pt-3 flex justify-end gap-2 border-t border-zinc-200">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-medium rounded"
+                  className="px-3 py-1.5 bg-zinc-100 text-zinc-700 text-xs font-medium rounded"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-1.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-semibold rounded flex items-center gap-1"
+                  className="px-4 py-1.5 bg-zinc-900 text-white text-xs font-semibold rounded flex items-center gap-1"
                 >
                   <PackageMinus className="w-3.5 h-3.5" />
                   Dispatch & Decrement Stock
