@@ -75,6 +75,16 @@ const PurchaseOrdersPage = () => {
 
   const handleCreatePO = async (e) => {
     e.preventDefault();
+    if (!supplierName.trim()) {
+      alert('Please enter a supplier name');
+      return;
+    }
+    for (const item of poItems) {
+      if (!item.productId) {
+        alert('Please select a valid product for all line items');
+        return;
+      }
+    }
     try {
       await api.post('/purchase-orders', {
         supplierName,
@@ -87,6 +97,13 @@ const PurchaseOrdersPage = () => {
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to create PO');
     }
+  };
+
+  const handleOpenModal = () => {
+    if (products.length > 0) {
+      setPoItems([{ productId: products[0]._id, quantity: 10, unitPrice: products[0].purchasePrice }]);
+    }
+    setShowModal(true);
   };
 
   const handleUpdateStatus = async (poId, nextStatus) => {
@@ -114,7 +131,7 @@ const PurchaseOrdersPage = () => {
 
         {canEdit && (
           <button
-            onClick={() => setShowModal(true)}
+            onClick={handleOpenModal}
             className="flex items-center gap-1.5 px-3.5 py-2 bg-zinc-900 hover:bg-black dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-semibold text-xs rounded-lg transition shadow-sm"
           >
             <Plus className="w-4 h-4" />

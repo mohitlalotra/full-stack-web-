@@ -81,6 +81,16 @@ const ChallansPage = () => {
 
   const handleCreateChallan = async (e) => {
     e.preventDefault();
+    if (!selectedCustomerId) {
+      alert('Please select a customer account');
+      return;
+    }
+    for (const item of challanItems) {
+      if (!item.productId) {
+        alert('Please select a valid product for all line items');
+        return;
+      }
+    }
     try {
       await api.post('/challans', {
         customerId: selectedCustomerId,
@@ -103,6 +113,16 @@ const ChallansPage = () => {
     }
   };
 
+  const handleOpenModal = () => {
+    if (customers.length > 0 && !selectedCustomerId) {
+      setSelectedCustomerId(customers[0]._id);
+    }
+    if (products.length > 0) {
+      setChallanItems([{ productId: products[0]._id, quantity: 1, unitPrice: products[0].sellingPrice }]);
+    }
+    setShowModal(true);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -119,7 +139,7 @@ const ChallansPage = () => {
 
         {canEdit && (
           <button
-            onClick={() => setShowModal(true)}
+            onClick={handleOpenModal}
             className="flex items-center gap-1.5 px-3.5 py-2 bg-zinc-900 hover:bg-black dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-semibold text-xs rounded-lg transition shadow-sm"
           >
             <Plus className="w-4 h-4" />
@@ -251,10 +271,12 @@ const ChallansPage = () => {
                     <div key={idx} className="flex flex-col gap-1 bg-zinc-50 dark:bg-zinc-950 p-2 border border-zinc-200 dark:border-zinc-800 rounded">
                       <div className="flex items-center gap-2">
                         <select
+                          required
                           value={item.productId}
                           onChange={(e) => handleItemChange(idx, 'productId', e.target.value)}
                           className="flex-1 px-2 py-1 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded text-xs text-zinc-900 dark:text-zinc-100"
                         >
+                          <option value="">-- Select Product --</option>
                           {products.map((p) => (
                             <option key={p._id} value={p._id}>
                               {p.sku} - {p.name} (Stock: {p.currentStock})

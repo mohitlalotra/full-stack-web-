@@ -129,6 +129,16 @@ const InvoicesPage = () => {
 
   const handleCreateInvoice = async (e) => {
     e.preventDefault();
+    if (!selectedCustomerId) {
+      alert('Please select a customer account');
+      return;
+    }
+    for (const item of invoiceItems) {
+      if (!item.name || !item.name.trim()) {
+        alert('Please enter a description for all billed items');
+        return;
+      }
+    }
     try {
       await api.post('/invoices', {
         customerId: selectedCustomerId,
@@ -141,6 +151,23 @@ const InvoicesPage = () => {
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to create invoice');
     }
+  };
+
+  const handleOpenModal = () => {
+    if (customers.length > 0 && !selectedCustomerId) {
+      setSelectedCustomerId(customers[0]._id);
+    }
+    if (products.length > 0) {
+      setInvoiceItems([
+        {
+          productId: products[0]._id,
+          name: products[0].name,
+          quantity: 1,
+          unitPrice: products[0].sellingPrice,
+        },
+      ]);
+    }
+    setShowCreateModal(true);
   };
 
   const handleRecordPayment = async (e) => {
@@ -181,7 +208,7 @@ const InvoicesPage = () => {
 
         {canEdit && (
           <button
-            onClick={() => setShowCreateModal(true)}
+            onClick={handleOpenModal}
             className="flex items-center gap-1.5 px-3.5 py-2 bg-zinc-900 hover:bg-black dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-semibold text-xs rounded-lg transition shadow-sm"
           >
             <Plus className="w-4 h-4" />
