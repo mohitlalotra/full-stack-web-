@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+// Smart URL resolution ensuring /api suffix
+let rawUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+rawUrl = rawUrl.replace(/\/+$/, '');
+if (!rawUrl.endsWith('/api')) {
+  rawUrl = `${rawUrl}/api`;
+}
+const API_BASE_URL = rawUrl;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -28,7 +34,7 @@ api.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       // Clear token on authorization failure
       localStorage.removeItem('erp_user');
-      if (window.location.pathname !== '/login') {
+      if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
         window.location.href = '/login';
       }
     }
